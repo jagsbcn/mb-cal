@@ -1,0 +1,64 @@
+.cal-mes {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1.2em;
+}
+
+.cal-semana {
+	border-bottom: 1px solid #e1e1e1;
+	border-left: 1px solid #e1e1e1;
+}
+
+.cal-dia {
+	min-height: 100px;
+	width: 14.2857%;
+	display: inline-block;
+	border-right: 1px solid #e1e1e1;
+}
+
+.cal-dia:hover {
+    background-color: #eeecee;
+}
+
+.no-padding > [class*='col-'] {
+    padding-right: 0;
+    padding-left: 0;
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.dia-etiq {
+	font-size: 0.9em;
+	width: 14.2857%;
+	display: inline-block;
+	font-weight: bold;
+	border-bottom: 1px solid #e1e1e1;
+	text-align: center;
+}
+
+.dia_num_otro {
+	opacity: 0.2;
+}
+
+.event {
+	padding-left: 5px;
+	width: 95%;
+	display: block;
+	border-radius: 4px;
+	margin: 2px auto 2px auto;		
+}
+
+i#glyph-prev {
+	padding-right: 15px;
+}
+
+i#glyph-sig {
+	padding-left: 15px;
+}
+
+.btn {
+	font-size: 1.4em;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
