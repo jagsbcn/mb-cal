@@ -15,6 +15,10 @@
 	border-right: 1px solid #e1e1e1;
 }
 
+.dia-hoy {
+	background-color: #ebfafd;
+}
+
 .cal-dia:hover {
     background-color: #eeecee;
 }
@@ -45,20 +49,4 @@
 	display: block;
 	border-radius: 4px;
 	margin: 2px auto 2px auto;		
-}
-
-i#glyph-prev {
-	padding-right: 15px;
-}
-
-i#glyph-sig {
-	padding-left: 15px;
-}
-
-.btn {
-	font-size: 1.4em;
-	padding-left: 15px;
-	padding-right: 15px;
-	padding-top: 10px;
-	padding-bottom: 10px;
 }

@@ -27,6 +27,8 @@
 		d6: 'Domingo'
 	};
 
+	var plant_dias_etiq = '<div class="cal-dias-etiq">{{#dias}}<div class="dia-etiq">{{nombre}}</div>{{/dias}}</div>';
+
 	function Calendario(params, contexto) {
 		this.contexto = contexto;
 		this.locale = textos;
@@ -52,7 +54,8 @@
 					this.mes_actual = 12;
 					this.anyo_mes_actual--;
 				}
-				break;			
+				break;
+
 			case "sig":				
 				this.mes_actual = this.mes_actual + 1;
 				if (this.mes_actual == 13) {
@@ -60,6 +63,12 @@
 					this.anyo_mes_actual++;
 				}
 				break;
+
+			case "hoy":
+				this.anyo_mes_actual = new Date().getFullYear();
+				this.mes_actual = new Date().getMonth() + 1;  // en JS cuentan meses de 0 a 11
+				break;
+
 		}
 		
 		this.dias_mes_actual = new Date(this.anyo_mes_actual, this.mes_actual, 0).getDate();
@@ -105,39 +114,32 @@
 		
 	};
 
-	Calendario.prototype.getTituloMes = function(pos) {
-		var mes_anyo;
-		
-		switch(pos) {
-			case "prev":
-				mes_anyo = this.locale["m" + (this.mes_anterior - 1)] + ' ' + this.anyo_mes_anterior;
-				break;
-			case "act":
-				mes_anyo = this.locale["m" + (this.mes_actual - 1)] + ' ' + this.anyo_mes_actual;
-				break;
-			case "sig":
-				mes_anyo = this.locale["m" + (this.mes_siguiente - 1)] + ' ' + this.anyo_mes_siguiente;
-				break;
-		}
-		
+	Calendario.prototype.getTituloMes = function() {
+		var mes_anyo = this.locale["m" + (this.mes_actual - 1)] + ' ' + this.anyo_mes_actual;
+
 		return mes_anyo;
 	};
 	
 	Calendario.prototype.mostrar = function() {
 		var cal_html;
-		var contador_dia =1, contador_dia_mes_sig = 1, contando_dias = false;
-		
+		var contador_dia =1, contador_dia_mes_sig = 1, contando_dias = false;		
+		var anyo_hoy = new Date().getFullYear();
+		var mes_hoy = new Date().getMonth() + 1;
+		var dia_hoy = new Date().getDate();
+
+
 		this.contexto.html('');
 		
 		cal_html = '<div class="cal-mes">';
 		
 		// Mostramos los dias de la semana
-		cal_html += '<div class="cal-dias-etiq">';
+		var data_dias_etiq = {dias:[]};
 		for (i=0; i<7; i++) {
-			cal_html += '<div class="dia-etiq">' + this.locale['d'+i] +'</div>';
+			data_dias_etiq.dias.push({"nombre":this.locale['d'+i]});
 		}
-		cal_html += '</div>';  //div.cal-dias_etiq
-		
+
+		cal_html += Mustache.render(plant_dias_etiq, data_dias_etiq);
+
 		//Mostramos los dias del mes
 		for (i=1; i <= this.semanas_mes_actual; i++) {
 			cal_html += '<div class="cal-semana">';
@@ -147,23 +149,35 @@
 				if (!contando_dias) {
 					if (j == this.dia_semana_inicio_mes) {
 						contando_dias = true;
-						cal_html += '<div class="cal-dia" data-anyo="' + this.anyo_mes_actual + '" data-mes="' + this.mes_actual + '" data-dia="' + contador_dia + '">';
+
+						if ((this.anyo_mes_actual == anyo_hoy) && (this.mes_actual == mes_hoy) && (contador_dia == dia_hoy)) {
+							cal_html += '<div class="cal-dia dia-hoy" data-fecha="' + contador_dia + '/' + this.mes_actual + '/' + this.anyo_mes_actual + '">';
+						} else {
+							cal_html += '<div class="cal-dia" data-fecha="' + contador_dia + '/' + this.mes_actual + '/' + this.anyo_mes_actual + '">';
+						}
+
 						cal_html += '<span class="event dia_num">' + contador_dia + '</span>';
 						cal_html += '</div>';
 						contador_dia++;
 					} else {
-						cal_html += '<div class="cal-dia" data-anyo="' + this.anyo_mes_anterior + '" data-mes="' + this.mes_anterior + '" data-dia="' + (this.dias_mes_anterior - this.dia_semana_inicio_mes + j + 1) + '">';
+						cal_html += '<div class="cal-dia" data-fecha="' + (this.dias_mes_anterior - this.dia_semana_inicio_mes + j + 1) + '/' + this.mes_anterior + '/' + this.anyo_mes_anterior + '">';
 						cal_html += '<span class="event dia_num_otro">' + (this.dias_mes_anterior - this.dia_semana_inicio_mes + j + 1) + '</span>';
 						cal_html += '</div>';
 					}
 				} else {
 					if (!(contador_dia > this.dias_mes_actual)) {
-						cal_html += '<div class="cal-dia" data-anyo="' + this.anyo_mes_actual + '" data-mes="' + this.mes_actual + '" data-dia="' + contador_dia + '">';
+						
+						if ((this.anyo_mes_actual == anyo_hoy) && (this.mes_actual == mes_hoy) && (contador_dia == dia_hoy)) {
+							cal_html += '<div class="cal-dia dia-hoy" data-fecha="' + contador_dia + '/' + this.mes_actual + '/' + this.anyo_mes_actual + '">';
+						} else {
+							cal_html += '<div class="cal-dia" data-fecha="' + contador_dia + '/' + this.mes_actual + '/' + this.anyo_mes_actual + '">';
+						}
+
 						cal_html +=' <span class="event dia_num">' + contador_dia + '</span>';
 						cal_html += '</div>';
 						contador_dia++;
 					} else {
-						cal_html += '<div class="cal-dia" data-anyo="' + this.anyo_mes_siguiente + '" data-mes="' + this.mes_siguiente + '" data-dia="' + contador_dia_mes_sig + '">';
+						cal_html += '<div class="cal-dia" data-fecha="' + contador_dia_mes_sig + '/' + this.mes_siguiente + '/' + this.anyo_mes_siguiente + '">';
 						cal_html += '<span class="event dia_num_otro">' + contador_dia_mes_sig + '</span>';
 						cal_html += '</div>';
 						contador_dia_mes_sig++;

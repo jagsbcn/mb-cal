@@ -1,33 +1,19 @@
-"use strict";
-
 (function ($) {
 
 	var opciones = {};
 
 	var calendario = $('#calendario').calendario(opciones);
-	
-	$("#txt-sig").text(calendario.getTituloMes("sig"));	
-	$("#txt-act").text(calendario.getTituloMes("act"));
-    $("#txt-prev").text(calendario.getTituloMes("prev"));	
+
+	$(".page-header h3").text(calendario.getTituloMes());
+
 	
 	$(".cal-dia").click(function() {
-		alert($(this).data("dia") + '/' + $(this).data("mes") + '/' + $(this).data("anyo"));
+		alert($(this).data("fecha"));
 	});
-	
-	$("#btn-sig").click(function() {
-		calendario.navegaMes("sig");
-		
-		$("#txt-sig").text(calendario.getTituloMes("sig"));	
-		$("#txt-act").text(calendario.getTituloMes("act"));
-		$("#txt-prev").text(calendario.getTituloMes("prev"));	
-	});
-	
-	$("#btn-prev").click(function() {
-		calendario.navegaMes("prev");
-		
-		$("#txt-sig").text(calendario.getTituloMes("sig"));	
-		$("#txt-act").text(calendario.getTituloMes("act"));
-		$("#txt-prev").text(calendario.getTituloMes("prev"));	
+
+	$('.btn-group button[data-calendar-nav]').click(function() {
+		calendario.navegaMes($(this).data("calendar-nav"));
+		$(".page-header h3").text(calendario.getTituloMes());
 	});
 
 }(jQuery));
