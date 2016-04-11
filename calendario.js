@@ -147,8 +147,6 @@
 	Calendario.prototype.mostrarAgendaDia = function(dia) {
 		var agenda_html;
 
-		alert(dia);
-
 		agenda_html = '<table>';
 		agenda_html += '<tr><th colspan="2" id="age-titulo">'+dia+'</th></tr>';
 
@@ -238,10 +236,6 @@
 		
 		//Mostramos el html generado
 		this.contexto.html(cal_html);
-
-		this.contexto.find(".cal-dia").click(function() {
-			this.mostrarAgendaDia($(this).data("fecha"));
-		});
 	};
 	
 	$.fn.calendario = function(params) {
