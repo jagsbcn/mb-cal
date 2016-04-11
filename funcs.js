@@ -2,13 +2,12 @@
 
 	var opciones = {};
 
-	var calendario = $('#calendario').calendario(opciones);
+	var calendario = $('#calendario').calendario($("#agenda-dia"));
 
 	$(".page-header h3").text(calendario.getTituloMes());
-
 	
 	$(".cal-dia").click(function() {
-		alert($(this).data("fecha"));
+		calendario.mostrarAgendaDia($(this).data("fecha"));
 	});
 
 	$('.btn-group button[data-calendar-nav]').click(function() {

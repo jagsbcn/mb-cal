@@ -29,19 +29,29 @@
 
 	var plant_dias_etiq = '<div class="cal-dias-etiq">{{#dias}}<div class="dia-etiq">{{nombre}}</div>{{/dias}}</div>';
 
-	function Calendario(params, contexto) {
+	function Calendario(agenda, contexto) {
+		this.agenda = agenda;
 		this.contexto = contexto;
 		this.locale = textos;
 		
+		//Info del dia de hoy
+		this.dia_hoy = new Date().getDate();
+		this.mes_hoy = new Date().getMonth() + 1;
+		this.anyo_hoy = new Date().getFullYear();
+
+
 		//Info del mes actual
-		this.anyo_mes_actual = new Date().getFullYear();
-		this.mes_actual = new Date().getMonth() + 1;  // en JS cuentan meses de 0 a 11
+		this.anyo_mes_actual = this.anyo_hoy;
+		this.mes_actual = this.mes_hoy;  // en JS cuentan meses de 0 a 11
 		this.dias_mes_actual = new Date(this.anyo_mes_actual, this.mes_actual, 0).getDate();
 		
 		calculaDatosCal(this);  //Esta function calcula el resto de datos del calendario a partir de la info del mes actual
 						
 		//Generamos la estructura HTML a visualizar
 		this.mostrar();
+
+		this.dia_agenda = this.dia_hoy+"/"+this.mes_hoy+"/"+this.anyo_hoy; 
+		this.mostrarAgendaDia(this.dia_agenda);
 
 		return this;
 	};
@@ -54,6 +64,14 @@
 					this.mes_actual = 12;
 					this.anyo_mes_actual--;
 				}
+
+				//Calculamos el dia de la agenda
+				if ((this.mes_hoy == this.mes_actual) && (this.anyo_hoy == this.anyo_mes_actual)) {
+					this.dia_agenda = this.dia_hoy+"/"+this.mes_hoy+"/"+this.anyo_hoy;
+				} else {
+					this.dia_agenda = "1/"+this.mes_actual+"/"+this.anyo_mes_actual;
+				}
+
 				break;
 
 			case "sig":				
@@ -62,11 +80,22 @@
 					this.mes_actual = 1;
 					this.anyo_mes_actual++;
 				}
+
+				//Calculamos el dia de la agenda
+				if ((this.mes_hoy == this.mes_actual) && (this.anyo_hoy == this.anyo_mes_actual)) {
+					this.dia_agenda = this.dia_hoy+"/"+this.mes_hoy+"/"+this.anyo_hoy;
+				} else {
+					this.dia_agenda = "1/"+this.mes_actual+"/"+this.anyo_mes_actual;
+				}
+
 				break;
 
 			case "hoy":
-				this.anyo_mes_actual = new Date().getFullYear();
-				this.mes_actual = new Date().getMonth() + 1;  // en JS cuentan meses de 0 a 11
+				this.anyo_mes_actual = this.anyo_hoy;
+				this.mes_actual = this.mes_hoy;  // en JS cuentan meses de 0 a 11
+				//Calculamos el dia de la agenda
+				this.dia_agenda = this.dia_hoy+"/"+this.mes_hoy+"/"+this.anyo_hoy;
+				
 				break;
 
 		}
@@ -75,6 +104,7 @@
 		
 		calculaDatosCal(this);
 		this.mostrar();
+		this.mostrarAgendaDia(this.dia_agenda);
 	};
 	
 	function calculaDatosCal(_this) {
@@ -114,6 +144,25 @@
 		
 	};
 
+	Calendario.prototype.mostrarAgendaDia = function(dia) {
+		var agenda_html;
+
+		alert(dia);
+
+		agenda_html = '<table>';
+		agenda_html += '<tr><th colspan="2" id="age-titulo">'+dia+'</th></tr>';
+
+		for (var hora=0; hora<24; hora++) {
+			agenda_html += '<tr><td rowspan="2" class="agenda-hora">'+hora+':00</td><td class="agenda-30-min-1"></td></tr>';
+			agenda_html += '<tr><td class="agenda-30-min-2"></td></tr>';
+		}
+
+		agenda_html += '</table';
+
+		this.agenda.height(this.contexto.height());
+		this.agenda.html(agenda_html);
+	};
+
 	Calendario.prototype.getTituloMes = function() {
 		var mes_anyo = this.locale["m" + (this.mes_actual - 1)] + ' ' + this.anyo_mes_actual;
 
@@ -122,11 +171,7 @@
 	
 	Calendario.prototype.mostrar = function() {
 		var cal_html;
-		var contador_dia =1, contador_dia_mes_sig = 1, contando_dias = false;		
-		var anyo_hoy = new Date().getFullYear();
-		var mes_hoy = new Date().getMonth() + 1;
-		var dia_hoy = new Date().getDate();
-
+		var contador_dia =1, contador_dia_mes_sig = 1, contando_dias = false;
 
 		this.contexto.html('');
 		
@@ -150,8 +195,8 @@
 					if (j == this.dia_semana_inicio_mes) {
 						contando_dias = true;
 
-						if ((this.anyo_mes_actual == anyo_hoy) && (this.mes_actual == mes_hoy) && (contador_dia == dia_hoy)) {
-							cal_html += '<div class="cal-dia dia-hoy" data-fecha="' + contador_dia + '/' + this.mes_actual + '/' + this.anyo_mes_actual + '">';
+						if ((this.anyo_mes_actual == this.anyo_hoy) && (this.mes_actual == this.mes_hoy) && (contador_dia == this.dia_hoy)) {
+							cal_html += '<div class="cal-dia dia-hoy" data-fecha="' + this.dia_hoy + '/' + this.mes_hoy + '/' + this.anyo_hoy + '">';
 						} else {
 							cal_html += '<div class="cal-dia" data-fecha="' + contador_dia + '/' + this.mes_actual + '/' + this.anyo_mes_actual + '">';
 						}
@@ -167,8 +212,8 @@
 				} else {
 					if (!(contador_dia > this.dias_mes_actual)) {
 						
-						if ((this.anyo_mes_actual == anyo_hoy) && (this.mes_actual == mes_hoy) && (contador_dia == dia_hoy)) {
-							cal_html += '<div class="cal-dia dia-hoy" data-fecha="' + contador_dia + '/' + this.mes_actual + '/' + this.anyo_mes_actual + '">';
+						if ((this.anyo_mes_actual == this.anyo_hoy) && (this.mes_actual == this.mes_hoy) && (contador_dia == this.dia_hoy)) {
+							cal_html += '<div class="cal-dia dia-hoy" data-fecha="' + this.dia_hoy + '/' + this.mes_hoy + '/' + this.anyo_hoy + '">';
 						} else {
 							cal_html += '<div class="cal-dia" data-fecha="' + contador_dia + '/' + this.mes_actual + '/' + this.anyo_mes_actual + '">';
 						}
@@ -193,6 +238,10 @@
 		
 		//Mostramos el html generado
 		this.contexto.html(cal_html);
+
+		this.contexto.find(".cal-dia").click(function() {
+			this.mostrarAgendaDia($(this).data("fecha"));
+		});
 	};
 	
 	$.fn.calendario = function(params) {
