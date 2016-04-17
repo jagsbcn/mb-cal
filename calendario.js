@@ -194,7 +194,7 @@
 						contando_dias = true;
 
 						if ((this.anyo_mes_actual == this.anyo_hoy) && (this.mes_actual == this.mes_hoy) && (contador_dia == this.dia_hoy)) {
-							cal_html += '<div class="cal-dia dia-hoy" data-fecha="' + this.dia_hoy + '/' + this.mes_hoy + '/' + this.anyo_hoy + '">';
+							cal_html += '<div class="cal-dia dia-hoy age-dia" data-fecha="' + this.dia_hoy + '/' + this.mes_hoy + '/' + this.anyo_hoy + '">';
 						} else {
 							cal_html += '<div class="cal-dia" data-fecha="' + contador_dia + '/' + this.mes_actual + '/' + this.anyo_mes_actual + '">';
 						}
@@ -211,7 +211,7 @@
 					if (!(contador_dia > this.dias_mes_actual)) {
 						
 						if ((this.anyo_mes_actual == this.anyo_hoy) && (this.mes_actual == this.mes_hoy) && (contador_dia == this.dia_hoy)) {
-							cal_html += '<div class="cal-dia dia-hoy" data-fecha="' + this.dia_hoy + '/' + this.mes_hoy + '/' + this.anyo_hoy + '">';
+							cal_html += '<div class="cal-dia dia-hoy age-dia" data-fecha="' + this.dia_hoy + '/' + this.mes_hoy + '/' + this.anyo_hoy + '">';
 						} else {
 							cal_html += '<div class="cal-dia" data-fecha="' + contador_dia + '/' + this.mes_actual + '/' + this.anyo_mes_actual + '">';
 						}
