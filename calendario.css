@@ -90,6 +90,6 @@ table {
 	text-align: center;
 }
 
-.age-dia {
-	border: 3px solid blue;
+.age-dia-actual {
+	background-color: #c7c5c7;
 }
