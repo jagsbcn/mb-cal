@@ -84,6 +84,10 @@ table {
 	width: 100%;
 }
 
+th {
+	background-color: #c7c5c7;
+}
+
 #age-titulo {
 	height: 21px;
 	width: 100%;
